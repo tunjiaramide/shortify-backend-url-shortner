@@ -1,0 +1,59 @@
+service: shortenurl
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  profile: slsUser
+  stage: 'dev'
+  region: 'us-east-1'
+  memorySize: 128
+  timeout: 3
+  httpApi:
+    cors: true
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action: 'dynamodb:*'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:${aws:accountId}:table/${self:custom.urlTableName}'
+
+  environment:
+    urlTable: '${self:custom.urlTableName}'
+    baseUrl: 
+      Fn::Join:
+        - ""
+        - - "https://"
+          - Ref: HttpApi  
+          - ".execute-api.${self:provider.region}.amazonaws.com"
+
+custom:
+  urlTableName: '${sls:stage}-shortify-table'
+
+functions:
+  setShortenUrl:
+    handler: 'src/functions/setShortenUrl.handler'
+    description: 'set URL shortener'
+    events:
+      - httpApi:  # ✅ Use "httpApi" instead of "http"
+          path: /
+          method: post
+
+  getShortenUrl:
+    handler: 'src/functions/getShortenUrl.handler'
+    description: 'get URL shortener'
+    events:
+      - httpApi:  # ✅ Use "httpApi" instead of "http"
+          path: /{code}
+          method: get
+
+resources:
+  Resources:
+    UrlTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: '${self:custom.urlTableName}'
+        AttributeDefinitions:
+          - AttributeName: 'id'
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: 'id'
+            KeyType: 'HASH'
+        BillingMode: 'PAY_PER_REQUEST'
