@@ -21,8 +21,14 @@ export const handler = async (event: APIGatewayProxyEvent) => {
         }
 
         const originalUrl = record.originalUrl;
-
-        return formatJSONResponse({ data: { originalUrl}})
+        
+        return formatJSONResponse({ 
+            data: {},
+            statusCode: 301,
+            headers: {
+                Location: originalUrl
+            }
+        })
 
     } catch(error:any){
         console.log('error', error)

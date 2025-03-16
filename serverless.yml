@@ -1,10 +1,10 @@
-service: shoturl
+service: shoturl-dev
 
 provider:
   name: aws
   runtime: nodejs20.x
   profile: slsUser
-  stage: 'prod'
+  stage: 'dev'
   region: 'us-east-1'
   memorySize: 128
   timeout: 3
