@@ -1,10 +1,10 @@
-service: shoturl-dev
+service: shoturl
 
 provider:
   name: aws
   runtime: nodejs20.x
   profile: slsUser
-  stage: 'dev'
+  stage: 'prod'
   region: 'us-east-1'
   memorySize: 128
   timeout: 3
@@ -27,7 +27,7 @@ provider:
 
 custom:
   urlTableName: '${sls:stage}-shortify-table'
-  frontendUrl: 'http://localhost:3000'
+  frontendUrl: 'https://shoturl.co/'
 
 functions:
   setShortenUrl:
