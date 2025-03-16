@@ -17,6 +17,7 @@ provider:
 
   environment:
     urlTable: '${self:custom.urlTableName}'
+    frontendUrl: '${self:custom.frontendUrl}'
     baseUrl: 
       Fn::Join:
         - ""
@@ -26,6 +27,7 @@ provider:
 
 custom:
   urlTableName: '${sls:stage}-shortify-table'
+  frontendUrl: 'http://localhost:3000'
 
 functions:
   setShortenUrl:

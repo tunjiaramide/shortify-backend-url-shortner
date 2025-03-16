@@ -17,7 +17,9 @@ export const handler = async (event: APIGatewayProxyEvent) => {
         const record = await dynamo.get(code, tableName);
 
         if (!record) {
-            return formatJSONResponse({ statusCode: 404, data: { message: 'Shortened URL not found' } });
+            return formatJSONResponse({ statusCode: 302, data: {}, headers: {
+                "Location": `${process.env.frontendUrl}`,
+              } });
         }
 
         const originalUrl = record.originalUrl;
@@ -26,7 +28,7 @@ export const handler = async (event: APIGatewayProxyEvent) => {
             data: {},
             statusCode: 301,
             headers: {
-                Location: originalUrl
+                Location: originalUrl,
             }
         })
 

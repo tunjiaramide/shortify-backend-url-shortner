@@ -8,6 +8,7 @@ export const formatJSONResponse = ({
         body: JSON.stringify(data),
         headers: {
             "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "HEAD, GET, OPTIONS",
             "Access-Control-Allow-Credentials": true,
             ...headers
         }
